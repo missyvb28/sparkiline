@@ -13,33 +13,37 @@
 
 #include <Sparki.h> // include the sparki library
 
+#define BASESPEED 100
+
 int speedLeft;
 int speedRight;
 
 void setup() 
 {
-  speedLeft = 100;
-  speedRight = 100;
+  speedLeft = BASESPEED;
+  speedRight = BASESPEED;
 }
 
 void loop() {
-  int deadband = 10;
+  int deadband = 1;
 
   int lineLeft   = sparki.lineLeft();   // measure the left IR sensor
   int lineCenter = sparki.lineCenter(); // measure the center IR sensor
   int lineRight  = sparki.lineRight();  // measure the right IR sensor
 
-  if ((lineLeft - deadband) > lineRight) { // Off-center to the right
-    speedLeft -= 5;
-    speedRight += 5;
-  } else if ((lineRight - deadband) > lineLeft) { // Off-center to the left
-    speedLeft += 5;
-    speedRight -= 5;
+  int lineDiff = lineLeft - lineRight;
+
+  lineDiff = lineDiff / 50;
+
+  if (lineDiff < -deadband) {
+    speedRight += lineDiff;
+    speedLeft = BASESPEED;
+  } else if (lineDiff > deadband) {
+    speedLeft -= lineDiff;
+    speedRight = BASESPEED;
   } else {
-    if (speedRight > speedLeft)
-      speedLeft = speedRight;
-    else
-      speedRight = speedLeft;
+    speedLeft = BASESPEED;
+    speedRight = BASESPEED;
   }
 
   sparki.motorRotate(MOTOR_LEFT, DIR_CCW, speedLeft);
@@ -55,7 +59,16 @@ void loop() {
   
   sparki.print("Line Right: "); // show right line sensor on screen
   sparki.println(lineRight);
-  
+
+  sparki.print("Speed Left: ");
+  sparki.println(speedLeft);
+
+  sparki.print("lineDiff: ");
+  sparki.println(lineDiff);
+
+  sparki.print("Speed Right: ");
+  sparki.println(speedRight);
+
   sparki.updateLCD(); // display all of the information written to the screen
 
   delay(100); // wait 0.1 seconds
