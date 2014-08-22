@@ -13,36 +13,37 @@
 
 #include <Sparki.h> // include the sparki library
 
-//#define MOTION
+int speedLeft;
+int speedRight;
 
 void setup() 
 {
+  speedLeft = 100;
+  speedRight = 100;
 }
 
 void loop() {
-  int threshold = 500;
-  
+  int deadband = 10;
+
   int lineLeft   = sparki.lineLeft();   // measure the left IR sensor
   int lineCenter = sparki.lineCenter(); // measure the center IR sensor
   int lineRight  = sparki.lineRight();  // measure the right IR sensor
 
-#if (MOTION)
-  if ( lineLeft > threshold ) // if line is below left line sensor
-  {  
-    sparki.moveLeft(); // turn left
+  if ((lineLeft - deadband) > lineRight) { // Off-center to the right
+    speedLeft -= 5;
+    speedRight += 5;
+  } else if ((lineRight - deadband) > lineLeft) { // Off-center to the left
+    speedLeft += 5;
+    speedRight -= 5;
+  } else {
+    if (speedRight > speedLeft)
+      speedLeft = speedRight;
+    else
+      speedRight = speedLeft;
   }
 
-  if ( lineRight > threshold ) // if line is below right line sensor
-  {  
-    sparki.moveRight(); // turn right
-  }
-
-  // if the center line sensor is the only one reading a line
-  if ( (lineCenter > threshold) && (lineLeft < threshold) && (lineRight < threshold) )
-  {
-    sparki.moveForward(); // move forward
-  }
-#endif
+  sparki.motorRotate(MOTOR_LEFT, DIR_CCW, speedLeft);
+  sparki.motorRotate(MOTOR_RIGHT, DIR_CW, speedRight);
 
   sparki.clearLCD(); // wipe the screen
   
