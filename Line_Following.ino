@@ -37,9 +37,13 @@ void loop() {
 
   if (lineDiff < -deadband) {
     speedRight += lineDiff;
+    if (speedRight < 0)
+      speedRight = 0;
     speedLeft = BASESPEED;
   } else if (lineDiff > deadband) {
     speedLeft -= lineDiff;
+    if (speedLeft < 0)
+      speedLeft = 0;
     speedRight = BASESPEED;
   } else {
     speedLeft = BASESPEED;
