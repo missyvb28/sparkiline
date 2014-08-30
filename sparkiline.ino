@@ -15,6 +15,8 @@
 
 #define BASESPEED 100
 
+#define PGAIN  0.1
+
 int speedLeft;
 int speedRight;
 
@@ -25,30 +27,22 @@ void setup()
 }
 
 void loop() {
-  int deadband = 1;
-
   int lineLeft   = sparki.lineLeft();   // measure the left IR sensor
   int lineCenter = sparki.lineCenter(); // measure the center IR sensor
   int lineRight  = sparki.lineRight();  // measure the right IR sensor
 
-  int lineDiff = lineLeft - lineRight;
+  int lineDiff = (int)((float)(lineLeft - lineRight) * PGAIN);
 
-  lineDiff = lineDiff / 50;
-
-  if (lineDiff < -deadband) {
-    speedRight += lineDiff;
-    if (speedRight < 0)
-      speedRight = 0;
-    speedLeft = BASESPEED;
-  } else if (lineDiff > deadband) {
-    speedLeft -= lineDiff;
-    if (speedLeft < 0)
-      speedLeft = 0;
-    speedRight = BASESPEED;
-  } else {
-    speedLeft = BASESPEED;
-    speedRight = BASESPEED;
-  }
+  speedRight = BASESPEED + lineDiff;
+  if (speedRight < 0)
+    speedRight = 0;
+  if (speedRight > 100)
+    speedRight = 100;
+  speedLeft = BASESPEED - lineDiff;
+  if (speedLeft < 0)
+    speedLeft = 0;
+  if (speedLeft > 100)
+    speedLeft = 100;
 
   sparki.motorRotate(MOTOR_LEFT, DIR_CCW, speedLeft);
   sparki.motorRotate(MOTOR_RIGHT, DIR_CW, speedRight);
