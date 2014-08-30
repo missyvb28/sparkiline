@@ -9,7 +9,11 @@ the mats upside down (i.e. smooth side up) and put the various tape
 patterns on the squares. The squares can then be assembled into various
 track patterns.
 
-![straight][images/sparkiline-straight.jpg]
+## Tile Tracks
+
+### Straight Line
+
+![straight](images/sparkiline-straight.jpg)
 
 The straight section gives Sparki an easy pattern to follow. It also
 can be used to see how well the program can capture a line by starting
@@ -19,7 +23,9 @@ line. Ideally, the program will cross the line and capture it. A figure
 of merit for the program will then be how large of an angle can Sparki
 be to the line and still reliably capture the line.
 
-![curve][images/sparkiline-curve.jpg]
+### Curves
+
+![curve](images/sparkiline-curve.jpg)
 
 The curved sections can be put together as a circle, which is very useful
 for testing the integral term of a PID loop. It can be combined with
@@ -31,15 +37,21 @@ a figure eight. A figure eight track is useful for verifying Sparki
 can follow both a left-hand and right-hand curve as well as traverse
 the crossover.
 
-![crossover][images/sparkiline-crossover.jpg]
+### Crossover
+
+![crossover](images/sparkiline-crossover.jpg)
 
 The crossover is used with curved tiles to form a figure eight track.
 
-![loop][images/sparkiline-loop.jpg]
+### Loop
+
+![loop](images/sparkiline-loop.jpg)
 
 Example of a loop end section.
 
-![zigzag][images/sparkiline-zigzag.jpg]
+# Zig-Zag
+
+![zigzag](images/sparkiline-zigzag.jpg)
 
 The zig-zag section can replace a straight section. This is a very
 difficult pattern to follow with just a PID loop.
